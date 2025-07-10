@@ -4,13 +4,11 @@ const c = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Resize canvas dynamically
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 
-// Game variables
 let score = 0;
 let gameOver = false;
 
@@ -48,6 +46,12 @@ class Player {
     this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
+
+    const margin = 30;
+    if (this.position.x < margin) this.position.x = margin;
+    if (this.position.x > canvas.width - margin) this.position.x = canvas.width - margin;
+    if (this.position.y < margin) this.position.y = margin;
+    if (this.position.y > canvas.height - margin) this.position.y = canvas.height - margin;
   }
 
   getVertices() {
@@ -133,11 +137,10 @@ const PROJECTILE_SPEED = 4;
 const projectiles = [];
 const asteroids = [];
 
-const intervalId = window.setInterval(() => {
+const intervalId = setInterval(() => {
   const index = Math.floor(Math.random() * 4);
   let x, y;
-  let vx = 0,
-    vy = 0;
+  let vx = 0, vy = 0;
   const radius = 50 * Math.random() + 10;
 
   switch (index) {
@@ -166,20 +169,18 @@ const intervalId = window.setInterval(() => {
   vx *= Math.random() * 1.5 + 0.5;
   vy *= Math.random() * 1.5 + 0.5;
 
-  asteroids.push(
-    new Asteroid({
-      position: { x, y },
-      velocity: { x: vx, y: vy },
-      radius,
-    })
-  );
+  asteroids.push(new Asteroid({
+    position: { x, y },
+    velocity: { x: vx, y: vy },
+    radius,
+  }));
 }, 3000);
 
-function circleCollision(circle1, circle2) {
-  const dx = circle2.position.x - circle1.position.x;
-  const dy = circle2.position.y - circle1.position.y;
+function circleCollision(c1, c2) {
+  const dx = c2.position.x - c1.position.x;
+  const dy = c2.position.y - c1.position.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
-  return distance <= circle1.radius + circle2.radius;
+  return distance <= c1.radius + c2.radius;
 }
 
 function circleTriangleCollision(circle, triangle) {
@@ -190,9 +191,7 @@ function circleTriangleCollision(circle, triangle) {
     let dy = end.y - start.y;
     let length = Math.sqrt(dx * dx + dy * dy);
 
-    let dot =
-      ((circle.position.x - start.x) * dx + (circle.position.y - start.y) * dy) /
-      Math.pow(length, 2);
+    let dot = ((circle.position.x - start.x) * dx + (circle.position.y - start.y) * dy) / (length ** 2);
 
     let closestX = start.x + dot * dx;
     let closestY = start.y + dot * dy;
@@ -223,7 +222,19 @@ function isPointOnLineSegment(x, y, start, end) {
 function animate() {
   if (gameOver) return;
   const animationId = requestAnimationFrame(animate);
-  c.fillStyle = 'black';
+
+  const gradient = c.createRadialGradient(
+    canvas.width / 2,
+    canvas.height / 2,
+    100,
+    canvas.width / 2,
+    canvas.height / 2,
+    canvas.width
+  );
+  gradient.addColorStop(0, '#1a1a2e');
+  gradient.addColorStop(0.5, '#16213e');
+  gradient.addColorStop(1, '#000000');
+  c.fillStyle = gradient;
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   player1.update();
@@ -248,7 +259,13 @@ function animate() {
 
     if (circleTriangleCollision(asteroid, player1.getVertices())) {
       gameOver = true;
-      document.getElementById('gameOver').classList.remove('hidden');
+
+      const gameOverScreen = document.getElementById('gameOver');
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      scoreDisplay.innerText = `Your Score: ${score}`;
+      gameOverScreen.classList.remove('hidden');
+      gameOverScreen.classList.add('show');
+
       cancelAnimationFrame(animationId);
       clearInterval(intervalId);
       return;

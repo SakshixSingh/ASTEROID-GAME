@@ -1,18 +1,24 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
- </head>
- <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asteroid Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+</head>
+<body>
   <div id="ui">
     <div id="score">Score: 0</div>
-    <div id="gameOver" class="hidden">💀 GAME OVER 💀<br><button onclick="restartGame()">Restart</button></div>
   </div>
+
+  <div id="gameOver" class="hidden">
+    <h1 id="gameOverText">💀 GAME OVER 💀</h1>
+    <p id="scoreDisplay">Your Score: 0</p>
+    <button onclick="restartGame()">🔁 Play Again</button>
+  </div>
+
   <canvas></canvas>
   <script src="script.js"></script>
 </body>
-
- </html>
+</html>

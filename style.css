@@ -1,4 +1,4 @@
-/* style.css */
+/* Reset and Canvas Setup */
 * {
   margin: 0;
   padding: 0;
@@ -10,11 +10,101 @@ body, html {
   width: 100%;
   background-color: black;
   overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
 }
 
 canvas {
   display: block;
 }
+
+/* Score UI */
+#ui {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  font-family: monospace;
+  font-size: 20px;
+  z-index: 2;
+}
+
+/* Game Over Screen */
+#gameOver {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+#gameOver.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#gameOver h1 {
+  font-size: 70px;
+  color: #ff5555;
+  animation: pop-in 1s ease forwards;
+  transform: scale(0.6);
+  opacity: 0;
+}
+
+#gameOver p {
+  font-size: 22px;
+  margin-top: 20px;
+  color: #e1e1e1;
+  animation: fade-in 2s ease forwards;
+  opacity: 0;
+}
+
+/* Buttons */
+button {
+  margin-top: 30px;
+  font-size: 18px;
+  padding: 12px 24px;
+  background-color: #8e44ad;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #9b59b6;
+}
+
+/* Hidden utility */
+.hidden {
+  display: none;
+}
+
+/* Animations */
+@keyframes pop-in {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
 
 
 
